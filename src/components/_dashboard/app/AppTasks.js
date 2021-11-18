@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Form, FormikProvider, useFormik } from 'formik';
+import {useState} from 'react';
 // material
 import {
   Box,
@@ -57,6 +58,10 @@ function TaskItem({ task, checked, formik, ...other }) {
 }
 
 export default function AppTasks() {
+
+  const [tasks,setTasks] = useState([...TASKS]);
+  const [oneTask,setOneTask] = useState("");
+
   const formik = useFormik({
     initialValues: {
       checked: [TASKS[2]]
@@ -68,15 +73,26 @@ export default function AppTasks() {
 
   const { values, handleSubmit } = formik;
 
+  function single(e){
+    console.log(e)
+    setOneTask(e.target.value);
+  }
+
+  function addTask(){
+    setTasks([oneTask,...tasks])
+  }
   return (
     <Card>
       <CardHeader title="Tasks" />
+      <input onChange={single} value={oneTask}/>
+      <button onClick={addTask}>Add Item</button>
       <Box sx={{ px: 3, py: 1 }}>
         <FormikProvider value={formik}>
           <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-            {TASKS.map((task) => (
+            {tasks.map((task,index) => (
               <TaskItem
                 task={task}
+                key={index}
                 formik={formik}
                 checked={values.checked.includes(task)}
               />

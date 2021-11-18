@@ -20,10 +20,15 @@ import {
 export default function DashboardApp() {
   const [data, setData] = useState('Not fetched data!');
 
-  useEffect(async () => {
-    const fetchedData =  axios.get('https://dog.ceo/api/breeds/list/all');
-    setData(fetchedData);
-  });
+  useEffect( () => {
+   async function getData(){
+    const fetchedData = await fetch('https://dog.ceo/api/breeds/list/all')
+    .then((res)=> res.json());
+console.log(fetchedData.message["australian"][0]);
+    setData(fetchedData.message["australian"][0]);
+   }
+   getData();
+  },[]);
 
   return (
     <Page title="Dashboard | Minimal-UI">
